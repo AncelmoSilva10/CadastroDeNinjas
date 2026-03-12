@@ -1,5 +1,6 @@
 package dev.java10x.CadastroDeNinja.Ninjas;
 
+import dev.java10x.CadastroDeNinja.Missoes.MissoesModel;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,10 +14,17 @@ public class NinjaModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
+
     private String email;
+
     private int idade;
-    private List <MissoesModel> missoes;
+
+    // @ManyToOne - um ninja pode tem uma unica missao
+    @ManyToOne
+    @JoinColumn (name = "missoes_id") //Foreign Key ou chave estrangeira
+    private MissoesModel missoes;
 
     public NinjaModel() {
     }
