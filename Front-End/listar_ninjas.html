@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Ninjas</title>
+
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Iosevka+Charon+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="./styles/listar_ninjas.css">
+</head>
+<body>
+    <h1>Lista de Ninjas</h1>
+    <table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Idade</th>
+            </tr>
+    </thead>
+    <tbody id="tabela-ninjas">
+        </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2">Total de Ninjas:</th>
+            <td id="total-ninjas">0</td>
+        </tr>
+    </tfoot>
+</table>
+
+
+<a href="index.html">
+    <button>Back</button>
+</a>
+
+
+</body>
+</html>
+
+<script>
+    const API_URL = 'http://localhost:8080/ninjas/listar';
+
+    async function carregarNinjas() {
+        try {
+            const response = await fetch(API_URL);
+            const ninjas = await response.json();
+
+            const corpoTabela = document.getElementById('tabela-ninjas');
+            const totalNinjasDoc = document.getElementById('total-ninjas');
+            
+            corpoTabela.innerHTML = '';
+
+            ninjas.forEach(ninja => {
+                const linha = document.createElement('tr');
+
+                
+                linha.innerHTML = `
+                    <td>${ninja.nome}</td>
+                    <td>${ninja.email}</td>
+                    <td>${ninja.idade}</td>
+                `;
+
+                corpoTabela.appendChild(linha);
+            });
+
+            
+            totalNinjasDoc.innerText = ninjas.length;
+
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+    }
+
+    window.onload = carregarNinjas;
+</script>
