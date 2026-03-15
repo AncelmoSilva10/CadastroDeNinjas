@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Missões</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Iosevka+Charon+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./styles/listar_missoes.css">
+</head>
+<body>
+
+    <h1>Listas de Missões</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Dificuldade</th>
+            </tr>
+        </thead>
+        <tbody id="tabela_missoes"></tbody>
+        <tfoot>
+            <tr>
+                <th>Total de Missões:</th>
+                <td id="total_missoes">0</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <a href="index.html">
+        <button>Back</button>
+    </a>
+    
+</body>
+</html>
+
+<script>
+    const API_URL = 'http://localhost:8080/missoes/listar';
+
+    async function carregarMissoes() {
+        try{
+            const response = await fetch(API_URL);
+            const missoes = await response.json();
+
+            const corpoTabela = document.getElementById('tabela_missoes');
+            const totalMissoes = document.getElementById('total_missoes');
+
+            corpoTabela.innerHTML = "";
+
+            missoes.forEach(missoes => {
+                const linha = document.createElement('tr');
+
+                linha.innerHTML = `
+                    <td>${missoes.nome}</td>
+                    <td>${missoes.dificuldade}</td>
+                `;
+
+                corpoTabela.appendChild(linha);
+                
+            });
+
+            totalMissoes.innerText = missoes.length;
+        }catch(error){
+            console.error('Erro:',error);
+        }
+    }
+
+    window.onload = carregarMissoes;
+
+</script>
