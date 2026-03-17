@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Ninjas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Iosevka+Charon+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./styles/cadastrar_ninjas.css">
+</head>
+<body>
+
+    <section class="formulario">
+        <div class="cursor typewriter-animation">
+            <h3 id="title">Olá, bem vindo a área de cadastro!</h3>
+        </div>
+        <div class="title_register">
+            <h2>Cadastre o seu Ninja!</h2>
+        </div>
+
+        <form id="form_cadastro">
+            <div class="inputs">
+                <span><b>Nome do ninja:</b></span>
+                <input type="text" id="ipt_nome" required>
+            </div>
+            
+            <div class="inputs">
+                <span><b>Email do ninja:</b></span>
+                <input type="email" id="ipt_email" required>
+            </div>
+            
+            <div class="inputs">
+                <span><b>Idade do ninja:</b></span>
+                <input type="number" id="ipt_idade" required>
+            </div>
+            
+            <button type="submit" class="send">Cadastrar Ninja</button>
+        </form>
+        <div class="back_index">
+            <a href="index.html">
+                <button class="back">Back</button>
+            </a>
+        </div>
+    </section>
+    
+</body>
+</html>
+
+<script>
+    
+    const form = document.getElementById('form_cadastro');
+
+    form.addEventListener('submit', function(event) {
+        //  Impede que a página recarregue e dê erro 
+        event.preventDefault();
+        
+        // Coleto os dados 
+        const nomeVar = document.getElementById('ipt_nome').value;
+        const emailVar = document.getElementById('ipt_email').value;
+        const idadeVar = document.getElementById('ipt_idade').value;
+
+        // Validando os campos
+        if (nomeVar == "" || emailVar == "" || idadeVar == "") {
+            alert("Por favor, preencha todos os campos!");
+            return;
+        }
+
+        const corpoDados = {
+            nome: nomeVar,
+            email: emailVar,
+            idade: idadeVar
+        };
+
+        console.log("Enviando dados:", corpoDados);
+
+        // Envio para o Back-end
+        fetch("http://localhost:8080/ninjas/criar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(corpoDados)
+        })
+        .then(res => {
+            if (res.ok) {
+                alert("Ninja cadastrado com sucesso!");
+                form.reset(); // Limpa o formulário após o sucesso
+            } else {
+                alert("Erro ao cadastrar. Verifique o console.");
+                return res.text().then(text => console.error(text));
+            }
+        })
+        .catch(err => {
+            console.error("Erro na requisição:", err);
+            alert("Não foi possível conectar ao servidor.");
+        });
+    });
+</script>
