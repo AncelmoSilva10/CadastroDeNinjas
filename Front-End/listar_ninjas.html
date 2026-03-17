@@ -20,6 +20,7 @@
             <th>Nome</th>
             <th>Email</th>
             <th>Idade</th>
+            <th>Missões</th>
             </tr>
     </thead>
     <tbody id="tabela-ninjas">
@@ -62,6 +63,7 @@
                     <td>${ninja.nome}</td>
                     <td>${ninja.email}</td>
                     <td>${ninja.idade}</td>
+                    <td>${ninja.missoes ? ninja.missoes.nome : 'N/A'}</td>
                 `;
 
                 corpoTabela.appendChild(linha);
