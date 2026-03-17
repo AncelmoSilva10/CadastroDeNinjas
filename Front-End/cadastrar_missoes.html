@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar missoes</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Iosevka+Charon+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="./styles/cadastrar_missoes.css">
+</head>
+<body>
+
+    <section class="forms">
+        <div class="title">
+            <h1 class="cursor typewriter-animation">Seja Bem vindo, a área de Cadastro de Missões!</h1>
+        </div>
+        <div class="second-title">
+            <h2>Cadastre a sua missão!</h2>
+        </div>
+        
+        <form id="forms_register_missoes">
+
+            <div class="inputs">
+                <span><b>Insira o nome da Missão:</b></span>
+                <input type="text" id="ipt_nome">
+            </div>
+            <div class="inputs">
+                <span><b>Insira o Rank da Missão:</b></span>
+                <input type="text" id="ipt_dificuldade">
+            </div>
+
+            
+            <button type="submit" class="send">Cadastrar Missão</button>
+   
+        </form>
+
+
+        <div class="back-button">
+            <a href="index.html">
+                <button class="back">Back</button>
+             </a>
+        </div>
+        
+        
+    </section>
+
+    
+</body>
+</html>
+
+<script>
+    const form = document.getElementById('forms_register_missoes');
+
+    form.addEventListener('submit', function(event){
+
+        event.preventDefault();
+
+
+        const nomeMissao = document.getElementById('ipt_nome').value;
+        const dificuldade = document.getElementById('ipt_dificuldade').value;
+
+        if(nomeMissao == '' || dificuldade == ''){
+            alert("Por Favor!, Insira todos os dados.");
+            return;
+        }
+
+        const corpoDados = {
+            nome: nomeMissao,
+            dificuldade: dificuldade
+        };
+
+        console.log("Enviando dados:", corpoDados);
+
+        fetch("http://localhost:8080/missoes/criar", {
+            method:"POST",
+            headers: {
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify(corpoDados)
+        })
+        .then(res => {
+            if(res.ok){
+                alert("Missão Cadastrada!");
+                form.reset();
+            }else{
+                alert("Não foi possível cadastra missão!");
+                return res.text().then(text => console.error(text));
+           }
+        })
+        .catch(err => {
+            console.error("Erro na requisição:", err);
+            alert("Não foi possível conectar ao servidor.");
+        });
+    });
+</script>
